@@ -1,0 +1,12 @@
+.header {
+    height: 200px;
+}
+
+.input {
+    position: relative;
+    box-sizing: border-box;
+    width: 620px;
+    max-width: 100%;
+    min-width: 340px;
+    margin: auto;
+}
