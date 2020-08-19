@@ -10,3 +10,11 @@
     min-width: 340px;
     margin: auto;
 }
+
+.footer {
+    position: fixed;
+    margin: auto;
+    left: 100px;
+    right: 0;
+    bottom: 20px;
+}

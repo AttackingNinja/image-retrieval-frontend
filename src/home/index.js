@@ -1,29 +1,19 @@
 import React from 'react';
-import {Layout, Menu, Breadcrumb} from 'antd';
+import {Layout, Menu} from 'antd';
 import {BrowserRouter as Router, Route, Link} from "react-router-dom";
 import ImageRetrieval from "../image-retrieval";
-import RetrievalResult from "../retrieval-result";
 import SystemInfo from "../system-info";
 import "./index.css"
 
-const {Header, Content, Sider} = Layout;
+const {Content, Sider} = Layout;
 const {SubMenu} = Menu;
 
 class Home extends React.Component {
-    state = {
-        collapsed: false,
-    };
-
-    onCollapse = collapsed => {
-        console.log(collapsed);
-        this.setState({collapsed});
-    };
-
     render() {
         return (
             <Router>
                 <Layout style={{minHeight: '100vh'}}>
-                    <Sider collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse}>
+                    <Sider collapsible={false}>
                         <br/>
                         <br/>
                         <br/>
@@ -44,10 +34,9 @@ class Home extends React.Component {
                         </Menu>
                     </Sider>
                     <Layout className="site-layout">
-                        <Content style={{margin: '0 16px'}}>
+                        <Content style={{margin: '0 16px', overflow: 'hidden'}}>
                             <Route exact path="/" component={ImageRetrieval}/>
                             <Route exact path="/image-retrieval" component={ImageRetrieval}/>
-                            <Route exact path="/retrieval-result" component={RetrievalResult}/>
                             <Route exact path="/system-info" component={SystemInfo}/>
                         </Content>
                     </Layout>
