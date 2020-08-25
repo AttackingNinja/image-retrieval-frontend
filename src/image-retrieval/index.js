@@ -1,11 +1,27 @@
 import React from 'react';
-import {Col, Input, message, Modal, Pagination, Row, Spin, Tooltip, Upload, Tag} from 'antd';
+import {
+    Col,
+    Input,
+    message,
+    Modal,
+    Pagination,
+    Row,
+    Spin,
+    Tooltip,
+    Upload,
+    Tag,
+    Divider,
+    Select,
+    DatePicker
+} from 'antd';
 import {CameraTwoTone, PictureOutlined} from '@ant-design/icons';
 import axios from 'axios';
 import "./index.css";
 
 const {Search} = Input;
 const {Dragger} = Upload;
+const {Option} = Select;
+const {RangePicker} = DatePicker;
 
 function getBase64FromFile(file) {
     return new Promise((resolve, reject) => {
@@ -34,19 +50,33 @@ function generateTagContent(tagList) {
 }
 
 function generateDisplayContent(page, pageImgNum, resultList) {
+    const maxWidth = 270;
+    const maxHeight = 270;
     const rowNum = Math.ceil(pageImgNum / 6);
     const rows = [];
+    rows.push(<Divider/>);
     for (let i = 0; i < rowNum; i++) {
         const cols = [];
         const lineImgNum = Math.min(6, pageImgNum - 6 * i);
         if (lineImgNum > 0) {
             for (let j = 0; j < lineImgNum; j++) {
+                let index = (page - 1) * 24 + 6 * i + j;
+                let width = resultList[index].width;
+                let height = resultList[index].height;
+                let radio = width / height;
+                if (radio < 1) {
+                    height = Math.min(height, maxHeight);
+                    width = Math.ceil(height * radio);
+                } else {
+                    width = Math.min(width, maxWidth);
+                    height = Math.ceil(width / radio);
+                }
                 cols.push(<Col span={4}>
-                    <img alt="预览" style={{width: 270, height: 180}}
-                         src={`http://localhost:8080/image-retrieval-upload?imageName=${resultList[(page - 1) * 24 + 6 * i + j].imageName}`}/>
+                    <img alt="预览" style={{width: width, height: height}}
+                         src={`http://localhost:8080/image-retrieval-upload?imageName=${resultList[index].image_name}`}/>
                 </Col>)
             }
-            rows.push(<Row gutter={[16, 16]}>{cols}</Row>);
+            rows.push(<Row align="middle" justify="center" gutter={[16, 16]}>{cols}</Row>);
         }
     }
     return rows;
@@ -63,6 +93,7 @@ class ImageRetrieval extends React.Component {
         previewImageContent: <React.Fragment/>,
         resultList: [],
         resultNum: 0,
+        selectContent: <React.Fragment/>,
     };
     showModal = () => {
         this.setState({visible: true});
@@ -117,6 +148,23 @@ class ImageRetrieval extends React.Component {
                 <Pagination defaultCurrent={1} defaultPageSize={24} showSizeChanger={false} total={resultList.length}
                             onChange={this.handlePageChange}/>);
             this.setState({footerContent: footerContent});
+            let selectContent = (<div>
+                <br/>
+                <Select defaultValue="全部类型" style={{width: 120}}>
+                    <Option value="全部类型">全部类型</Option>
+                    <Option value="jpg">jpg</Option>
+                    <Option value="png">png</Option>
+                    <Option value="bmp">bmp</Option>
+                </Select>
+                <Select defaultValue="全部尺寸" style={{width: 120}}>
+                    <Option value="全部尺寸">全部尺寸</Option>
+                    <Option value="大尺寸">大尺寸</Option>
+                    <Option value="中尺寸">中尺寸</Option>
+                    <Option value="小尺寸">小尺寸</Option>
+                </Select>
+                <RangePicker/>
+            </div>);
+            this.setState({selectContent: selectContent});
         } else if (status === 'error') {
             this.closeModal();
             message.error(`${info.file.name} file upload failed.`);
@@ -178,6 +226,7 @@ class ImageRetrieval extends React.Component {
                         onSearch={this.handleSearch}
                         style={{width: 620}}
                     />
+                    {this.state.selectContent}
                     <Modal
                         title="上传图片"
                         visible={this.state.visible}
@@ -194,7 +243,6 @@ class ImageRetrieval extends React.Component {
                         &emsp;
                         {this.state.tagContent}
                     </div>
-                    <br/>
                     {this.state.displayContent}
                 </div>
                 {this.state.footerContent}
