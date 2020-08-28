@@ -73,7 +73,7 @@ function generateDisplayContent(page, pageImgNum, resultList) {
                 }
                 cols.push(<Col span={4}>
                     <img alt="预览" style={{width: width, height: height}}
-                         src={`http://localhost:8080/image-retrieval-upload?imageName=${resultList[index].image_name}`}/>
+                         src={`http://localhost:8080/get-result-image?imageName=${resultList[index].image_name}`}/>
                 </Col>)
             }
             rows.push(<Row align="middle" justify="center" gutter={[16, 16]}>{cols}</Row>);
@@ -110,8 +110,8 @@ class ImageRetrieval extends React.Component {
         if (status === 'uploading') {
             let modalContent = (<Spin spinning={true}>
                 <Dragger
-                    name={"file"}
-                    action={"http://localhost:8080/image-retrieval-upload"}
+                    name={"image"}
+                    action={"http://127.0.0.1:9001/get-query-code"}
                     onChange={this.handleChange}
                     showUploadList={false}
                 >
@@ -123,48 +123,53 @@ class ImageRetrieval extends React.Component {
             </Spin>);
             this.setState({modalContent: modalContent});
         } else if (status === 'done') {
-            if (!info.file.url && !info.file.preview) {
-                info.file.preview = await getBase64FromFile(info.file.originFileObj);
-            }
-            let previewImageContent = (<span>
-                <img alt="预览" style={{width: 120, height: 90}} src={info.file.preview}/>
-            </span>);
-            let headerContent = (<br/>);
-            let tagList = [];
-            tagList.push(...info.file.response.tagInfos)
-            let tagContent = generateTagContent(tagList);
-            let resultList = [];
-            resultList.push(...info.file.response.imageInfos);
-            this.closeModal();
-            this.setState({headerContent: headerContent});
-            this.setState({previewImageContent: previewImageContent});
-            this.setState({tagContent: tagContent});
-            this.setState({resultList: resultList});
-            this.setState({resultNum: resultList.length});
-            const pageImgNum = Math.min(24, resultList.length);
-            const rows = generateDisplayContent(1, pageImgNum, resultList);
-            this.setState({displayContent: rows});
-            let footerContent = (
-                <Pagination defaultCurrent={1} defaultPageSize={24} showSizeChanger={false} total={resultList.length}
-                            onChange={this.handlePageChange}/>);
-            this.setState({footerContent: footerContent});
-            let selectContent = (<div>
-                <br/>
-                <Select defaultValue="全部类型" style={{width: 120}}>
-                    <Option value="全部类型">全部类型</Option>
-                    <Option value="jpg">jpg</Option>
-                    <Option value="png">png</Option>
-                    <Option value="bmp">bmp</Option>
-                </Select>
-                <Select defaultValue="全部尺寸" style={{width: 120}}>
-                    <Option value="全部尺寸">全部尺寸</Option>
-                    <Option value="大尺寸">大尺寸</Option>
-                    <Option value="中尺寸">中尺寸</Option>
-                    <Option value="小尺寸">小尺寸</Option>
-                </Select>
-                <RangePicker/>
-            </div>);
-            this.setState({selectContent: selectContent});
+            axios.get(`http://localhost:8080/get-result-info?hashcode=${info.file.response}`)
+                .then(async response => {
+                        if (!info.file.url && !info.file.preview) {
+                            info.file.preview = await getBase64FromFile(info.file.originFileObj);
+                        }
+                        let previewImageContent = (<span>
+                            <img alt="预览" style={{width: 120, height: 90}} src={info.file.preview}/>
+                        </span>);
+                        let headerContent = (<br/>);
+                        let tagList = [];
+                        tagList.push(...response.data.tagInfos)
+                        let tagContent = generateTagContent(tagList);
+                        let resultList = [];
+                        resultList.push(...response.data.imageInfos);
+                        this.closeModal();
+                        this.setState({headerContent: headerContent});
+                        this.setState({previewImageContent: previewImageContent});
+                        this.setState({tagContent: tagContent});
+                        this.setState({resultList: resultList});
+                        this.setState({resultNum: resultList.length});
+                        const pageImgNum = Math.min(24, resultList.length);
+                        const rows = generateDisplayContent(1, pageImgNum, resultList);
+                        this.setState({displayContent: rows});
+                        let footerContent = (
+                            <Pagination defaultCurrent={1} defaultPageSize={24} showSizeChanger={false} total={resultList.length}
+                                        onChange={this.handlePageChange}/>);
+                        this.setState({footerContent: footerContent});
+                        let selectContent = (<div>
+                            <br/>
+                            <Select defaultValue="全部类型" style={{width: 120}}>
+                                <Option value="全部类型">全部类型</Option>
+                                <Option value="jpg">jpg</Option>
+                                <Option value="png">png</Option>
+                                <Option value="bmp">bmp</Option>
+                            </Select>
+                            <Select defaultValue="全部尺寸" style={{width: 120}}>
+                                <Option value="全部尺寸">全部尺寸</Option>
+                                <Option value="大尺寸">大尺寸</Option>
+                                <Option value="中尺寸">中尺寸</Option>
+                                <Option value="小尺寸">小尺寸</Option>
+                            </Select>
+                            <RangePicker/>
+                        </div>);
+                        this.setState({selectContent: selectContent});
+                    }
+                )
+                .catch(error => console.log(error));
         } else if (status === 'error') {
             this.closeModal();
             message.error(`${info.file.name} file upload failed.`);
@@ -187,8 +192,8 @@ class ImageRetrieval extends React.Component {
     handleClick = () => {
         let modalContent = (<Spin spinning={false}>
             <Dragger
-                name={"file"}
-                action={"http://localhost:8080/image-retrieval-upload"}
+                name={"image"}
+                action={"http://127.0.0.1:9001/get-query-code"}
                 onChange={this.handleChange}
                 showUploadList={false}
             >
