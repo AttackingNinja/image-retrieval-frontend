@@ -27,10 +27,15 @@ class Home extends React.Component {
                                 <Menu.Item key="4">删除图片</Menu.Item>
                             </SubMenu>
                             <SubMenu key="sub2" title="分类管理">
-                                <Menu.Item key="6">新增分类</Menu.Item>
-                                <Menu.Item key="8">删除分类</Menu.Item>
+                                <Menu.Item key="5">新增分类</Menu.Item>
+                                <Menu.Item key="6">删除分类</Menu.Item>
                             </SubMenu>
-                            <Menu.Item key="9"><Link to="/system-info">系统管理</Link></Menu.Item>
+                            <SubMenu key="sub3" title="系统管理">
+                                <Menu.Item key="7">权限管理</Menu.Item>
+                                <Menu.Item key="8">容器文件合并</Menu.Item>
+                                <Menu.Item key="9">替换模型</Menu.Item>
+                                <Menu.Item key="10">系统信息</Menu.Item>
+                            </SubMenu>
                         </Menu>
                     </Sider>
                     <Layout className="site-layout">

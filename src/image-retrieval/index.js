@@ -71,9 +71,18 @@ function generateDisplayContent(page, pageImgNum, resultList) {
                     width = Math.min(width, maxWidth);
                     height = Math.ceil(width / radio);
                 }
+                let image_name = resultList[index].image_name;
+                image_name = image_name.replace(new RegExp('\\+', 'g'), '%2B')
+                    .replace(new RegExp('/', 'g'), '%2F')
+                    .replace(new RegExp('\\?', 'g'), '%3F')
+                    .replace(new RegExp('%', 'g'), '%25')
+                    .replace(new RegExp('#', 'g'), '%23')
+                    .replace(new RegExp('&', 'g'), '%26');
+                let src = 'http://localhost:8080/get-result-image?imageName=' + image_name;
                 cols.push(<Col span={4}>
-                    <img alt="预览" style={{width: width, height: height}}
-                         src={`http://localhost:8080/get-result-image?imageName=${resultList[index].image_name}`}/>
+                    <img alt="预览"
+                         style={{width: width, height: height}}
+                         src={src}/>
                 </Col>)
             }
             rows.push(<Row align="middle" justify="center" gutter={[16, 16]}>{cols}</Row>);
@@ -147,7 +156,8 @@ class ImageRetrieval extends React.Component {
                         const rows = generateDisplayContent(1, pageImgNum, resultList);
                         this.setState({displayContent: rows});
                         let footerContent = (
-                            <Pagination defaultCurrent={1} defaultPageSize={24} showSizeChanger={false} total={resultList.length}
+                            <Pagination defaultCurrent={1} defaultPageSize={24} showSizeChanger={false}
+                                        total={resultList.length}
                                         onChange={this.handlePageChange}/>);
                         this.setState({footerContent: footerContent});
                         let selectContent = (<div>
