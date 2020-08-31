@@ -1,12 +1,12 @@
 import React from 'react';
-import {Table} from "antd";
+import {Upload, Button, Table} from 'antd';
+import {UploadOutlined} from '@ant-design/icons';
 
 const columns = [
     {
         title: '分类名',
         dataIndex: 'name',
         key: 'name',
-        render: text => <a>{text}</a>,
     },
     {
         title: '图片数',
@@ -17,6 +17,12 @@ const columns = [
         title: '分类描述',
         dataIndex: 'address',
         key: 'address',
+    },
+    {
+        title: '操作',
+        dataIndex: 'action',
+        key: 'action',
+        render: text => <a>{text}</a>,
     }
 ];
 
@@ -27,6 +33,7 @@ const data = [
         age: 6759,
         address: '项目图纸',
         tags: ['nice', 'developer'],
+        action: '上传该分类图片',
     },
     {
         key: '2',
@@ -34,6 +41,7 @@ const data = [
         age: 8821,
         address: '施工现场照片',
         tags: ['loser'],
+        action: '上传该分类图片',
     },
     {
         key: '3',
@@ -41,6 +49,7 @@ const data = [
         age: 7562,
         address: '人员照片',
         tags: ['cool', 'teacher'],
+        action: '上传该分类图片',
     },
     {
         key: '4',
@@ -48,6 +57,7 @@ const data = [
         age: 4564,
         address: '会议照片',
         tags: ['nice', 'developer'],
+        action: '上传该分类图片',
     },
     {
         key: '5',
@@ -55,6 +65,7 @@ const data = [
         age: 1231,
         address: '绿化设计图',
         tags: ['loser'],
+        action: '上传该分类图片',
     },
     {
         key: '6',
@@ -62,6 +73,7 @@ const data = [
         age: 7456,
         address: '室内照片',
         tags: ['cool', 'teacher'],
+        action: '上传该分类图片',
     },
     {
         key: '7',
@@ -69,6 +81,7 @@ const data = [
         age: 7641,
         address: '水电设计图',
         tags: ['nice', 'developer'],
+        action: '上传该分类图片',
     },
     {
         key: '8',
@@ -76,6 +89,7 @@ const data = [
         age: 9135,
         address: '污水管路设计图',
         tags: ['loser'],
+        action: '上传该分类图片',
     },
     {
         key: '9',
@@ -83,6 +97,7 @@ const data = [
         age: 5798,
         address: '装修照片',
         tags: ['cool', 'teacher'],
+        action: '上传该分类图片',
     },
     {
         key: '10',
@@ -90,30 +105,38 @@ const data = [
         age: 199,
         address: '建筑概念图',
         tags: ['cool', 'teacher'],
+        action: '上传该分类图片',
     }
 ];
 
-class CategoryView extends React.Component {
+class ImageManageUpload extends React.Component {
     render() {
         return (
             <div>
-                {/*<Breadcrumb style={{margin: '16px 0'}}>*/}
-                {/*    <Breadcrumb.Item>分类浏览</Breadcrumb.Item>*/}
-                {/*    <Breadcrumb.Item>建筑</Breadcrumb.Item>*/}
-                {/*</Breadcrumb>*/}
                 <br/>
-                <Table columns={columns}
-                       dataSource={data}
-                       pagination={{
-                           position: ['bottomCenter'],
-                           defaultCurrent: 1,
-                           defaultPageSize: 10,
-                           showSizeChanger: false,
-                           total: 110
-                       }}/>
+                <div>
+                    <Upload showUploadList={false}>
+                        <Button type="primary" icon={<UploadOutlined/>}>
+                            上传图片
+                        </Button>
+                    </Upload>
+                </div>
+                <br/>
+                <div style={{textAlign: 'center'}}>
+                    <Table columns={columns}
+                           dataSource={data}
+                           pagination={{
+                               position: ['bottomCenter'],
+                               defaultCurrent: 1,
+                               defaultPageSize: 10,
+                               showSizeChanger: false,
+                               total: 110
+                           }}/>
+                </div>
             </div>
+
         );
     }
 }
 
-export default CategoryView;
+export default ImageManageUpload;

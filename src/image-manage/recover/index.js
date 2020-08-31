@@ -1,5 +1,5 @@
 import React from 'react';
-import {Table} from "antd";
+import {Button, Table} from 'antd';
 
 const columns = [
     {
@@ -9,7 +9,7 @@ const columns = [
         render: text => <a>{text}</a>,
     },
     {
-        title: '图片数',
+        title: '删除图片数',
         dataIndex: 'age',
         key: 'age',
     },
@@ -17,6 +17,12 @@ const columns = [
         title: '分类描述',
         dataIndex: 'address',
         key: 'address',
+    },
+    {
+        title: '操作',
+        dataIndex: 'action',
+        key: 'action',
+        render: text => <a>{text}</a>,
     }
 ];
 
@@ -24,83 +30,89 @@ const data = [
     {
         key: '1',
         name: '图纸',
-        age: 6759,
+        age: 6,
         address: '项目图纸',
         tags: ['nice', 'developer'],
+        action: '恢复',
     },
     {
         key: '2',
         name: '施工现场',
-        age: 8821,
+        age: 8,
         address: '施工现场照片',
         tags: ['loser'],
+        action: '恢复',
     },
     {
         key: '3',
         name: '人员',
-        age: 7562,
+        age: 2,
         address: '人员照片',
         tags: ['cool', 'teacher'],
+        action: '恢复',
     },
     {
         key: '4',
         name: '会议',
-        age: 4564,
+        age: 4,
         address: '会议照片',
         tags: ['nice', 'developer'],
+        action: '恢复',
     },
     {
         key: '5',
         name: '绿化',
-        age: 1231,
+        age: 1,
         address: '绿化设计图',
         tags: ['loser'],
+        action: '恢复',
     },
     {
         key: '6',
         name: '室内',
-        age: 7456,
+        age: 5,
         address: '室内照片',
         tags: ['cool', 'teacher'],
+        action: '恢复',
     },
     {
         key: '7',
         name: '水电',
-        age: 7641,
+        age: 1,
         address: '水电设计图',
         tags: ['nice', 'developer'],
+        action: '恢复',
     },
     {
         key: '8',
         name: '污水管路',
-        age: 9135,
+        age: 0,
         address: '污水管路设计图',
         tags: ['loser'],
+        action: '恢复',
     },
     {
         key: '9',
         name: '装修',
-        age: 5798,
+        age: 8,
         address: '装修照片',
         tags: ['cool', 'teacher'],
+        action: '恢复',
     },
     {
         key: '10',
         name: '概念图',
-        age: 199,
+        age: 9,
         address: '建筑概念图',
         tags: ['cool', 'teacher'],
+        action: '恢复',
     }
 ];
 
-class CategoryView extends React.Component {
+class ImageManageRecover extends React.Component {
     render() {
         return (
-            <div>
-                {/*<Breadcrumb style={{margin: '16px 0'}}>*/}
-                {/*    <Breadcrumb.Item>分类浏览</Breadcrumb.Item>*/}
-                {/*    <Breadcrumb.Item>建筑</Breadcrumb.Item>*/}
-                {/*</Breadcrumb>*/}
+            <div style={{textAlign: 'center'}}>
                 <br/>
                 <Table columns={columns}
                        dataSource={data}
@@ -116,4 +128,4 @@ class CategoryView extends React.Component {
     }
 }
 
-export default CategoryView;
+export default ImageManageRecover;

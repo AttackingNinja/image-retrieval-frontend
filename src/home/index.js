@@ -4,6 +4,10 @@ import {BrowserRouter as Router, Route, Link} from "react-router-dom";
 import ImageRetrieval from "../image-retrieval";
 import CategoryView from "../category-view";
 import "./index.css"
+import ImageManageUpload from "../image-manage/upload";
+import ImageManageDelete from "../image-manage/delete";
+import ImageManageRecover from "../image-manage/recover";
+import CategoryManage from "../category-manage";
 
 const {Content, Sider} = Layout;
 const {SubMenu} = Menu;
@@ -23,17 +27,15 @@ class Home extends React.Component {
                             <Menu.Item key="1"><Link to="/image-retrieval">图片检索</Link></Menu.Item>
                             <Menu.Item key="2"><Link to="/category-view">分类浏览</Link></Menu.Item>
                             <SubMenu key="sub1" title="图片管理">
-                                <Menu.Item key="3">上传图片</Menu.Item>
-                                <Menu.Item key="4">删除图片</Menu.Item>
+                                <Menu.Item key="3"><Link to="/image-manage/upload">上传图片</Link></Menu.Item>
+                                <Menu.Item key="4"><Link to="/image-manage/delete">删除图片</Link></Menu.Item>
+                                <Menu.Item key="5"><Link to="/image-manage/recover">恢复图片</Link></Menu.Item>
                             </SubMenu>
-                            <SubMenu key="sub2" title="分类管理">
-                                <Menu.Item key="5">新增分类</Menu.Item>
-                                <Menu.Item key="6">删除分类</Menu.Item>
-                            </SubMenu>
+                            <Menu.Item key="6"><Link to="/category-manage">分类管理</Link></Menu.Item>
                             <SubMenu key="sub3" title="系统管理">
                                 <Menu.Item key="7">权限管理</Menu.Item>
-                                <Menu.Item key="8">容器文件合并</Menu.Item>
-                                <Menu.Item key="9">替换模型</Menu.Item>
+                                <Menu.Item key="8">容器文件管理</Menu.Item>
+                                <Menu.Item key="9">模型管理</Menu.Item>
                                 <Menu.Item key="10">系统信息</Menu.Item>
                             </SubMenu>
                         </Menu>
@@ -43,6 +45,10 @@ class Home extends React.Component {
                             <Route exact path="/" component={ImageRetrieval}/>
                             <Route exact path="/image-retrieval" component={ImageRetrieval}/>
                             <Route exact path="/category-view" component={CategoryView}/>
+                            <Route exact path="/image-manage/upload" component={ImageManageUpload}/>
+                            <Route exact path="/image-manage/delete" component={ImageManageDelete}/>
+                            <Route exact path="/image-manage/recover" component={ImageManageRecover}/>
+                            <Route exact path="/category-manage" component={CategoryManage}/>
                         </Content>
                     </Layout>
                 </Layout>

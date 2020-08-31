@@ -13,8 +13,10 @@ import {
     Divider,
     Select,
     DatePicker,
+    Checkbox,
+    Button,
 } from 'antd';
-import {CameraTwoTone, PictureOutlined} from '@ant-design/icons';
+import {CameraTwoTone, PictureOutlined, DeleteOutlined} from '@ant-design/icons';
 import axios from 'axios';
 import "./index.css";
 
@@ -30,15 +32,6 @@ function getBase64FromFile(file) {
         reader.onload = () => resolve(reader.result);
         reader.onerror = error => reject(error);
     });
-}
-
-function getBase64FromArrayBuffer(img) {
-    return `data:image/jpeg;base64,${window.btoa(
-        new Uint8Array(img).reduce(
-            (data, byte) => data + String.fromCharCode(byte),
-            ""
-        )
-    )}`;
 }
 
 function generateTagContent(tagList) {
@@ -80,6 +73,7 @@ function generateDisplayContent(page, pageImgNum, resultList) {
                     .replace(new RegExp('&', 'g'), '%26');
                 let src = 'http://localhost:8080/get-result-image?imageName=' + image_name;
                 cols.push(<Col span={4}>
+                    <Checkbox/>
                     <img alt="预览"
                          style={{width: width, height: height}}
                          src={src}/>
@@ -91,7 +85,7 @@ function generateDisplayContent(page, pageImgNum, resultList) {
     return rows;
 }
 
-class ImageRetrieval extends React.Component {
+class ImageManageDelete extends React.Component {
     state = {
         visible: false,
         headerContent: <header className="header"/>,
@@ -103,6 +97,7 @@ class ImageRetrieval extends React.Component {
         resultList: [],
         resultNum: 0,
         selectContent: <React.Fragment/>,
+        deleteContent: <React.Fragment/>,
     };
     showModal = () => {
         this.setState({visible: true});
@@ -179,6 +174,16 @@ class ImageRetrieval extends React.Component {
                             <RangePicker/>
                         </div>);
                         this.setState({selectContent: selectContent});
+                        let deleteContent = (<span>
+                            <Button type="primary">
+                                选择本页所有图片
+                            </Button>
+                            &emsp;
+                            <Button type="primary" icon={<DeleteOutlined/>}>
+                                删除所选图片
+                            </Button>
+                        </span>);
+                        this.setState({deleteContent:deleteContent})
                     }
                 )
                 .catch(error => console.log(error));
@@ -226,7 +231,7 @@ class ImageRetrieval extends React.Component {
 
     render() {
         return (
-            <div style={{textAlign: 'center'}}>
+            <div>
                 <div className="input">
                     {this.state.headerContent}
                     <Search
@@ -255,18 +260,24 @@ class ImageRetrieval extends React.Component {
                 </div>
                 <br/>
                 <div>
-                    <div>
+                    <div style={{textAlign: 'center'}}>
                         {this.state.previewImageContent}
                         &emsp;
                         {this.state.tagContent}
                     </div>
+                    <div>
+                        <br/>
+                        {this.state.deleteContent}
+                    </div>
                     {this.state.displayContent}
                 </div>
-                {this.state.footerContent}
+                <div style={{textAlign: 'center'}}>
+                    {this.state.footerContent}
+                </div>
                 <br/>
             </div>
         );
     };
 }
 
-export default ImageRetrieval;
+export default ImageManageDelete;
