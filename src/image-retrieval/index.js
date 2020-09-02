@@ -132,7 +132,8 @@ class ImageRetrieval extends React.Component {
             </Spin>);
             this.setState({modalContent: modalContent});
         } else if (status === 'done') {
-            axios.get(`http://localhost:8080/get-result-info?hashcode=${info.file.response}`)
+            console.log(info.file.response);
+            axios.get(`http://localhost:8080/get-result-info?hashcode=${info.file.response.hashcode}&origincode=${info.file.response.origincode}`)
                 .then(async response => {
                         if (!info.file.url && !info.file.preview) {
                             info.file.preview = await getBase64FromFile(info.file.originFileObj);
