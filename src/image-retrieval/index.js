@@ -32,15 +32,6 @@ function getBase64FromFile(file) {
     });
 }
 
-function getBase64FromArrayBuffer(img) {
-    return `data:image/jpeg;base64,${window.btoa(
-        new Uint8Array(img).reduce(
-            (data, byte) => data + String.fromCharCode(byte),
-            ""
-        )
-    )}`;
-}
-
 function generateTagContent(tagList) {
     const tags = [];
     for (let i = 0; i < tagList.length; i++) {
@@ -193,7 +184,37 @@ class ImageRetrieval extends React.Component {
         if (value !== '') {
             axios.get('http://localhost:8080/image-retrieval-input', {params: {searchValue: value}})
                 .then(response => {
-                    console.log(response);
+                    let previewImageContent = (<React.Fragment/>);
+                    this.setState({previewImageContent: previewImageContent});
+                    let resultList = [];
+                    resultList.push(...response.data);
+                    this.setState({resultList: resultList});
+                    this.setState({resultNum: resultList.length});
+                    const pageImgNum = Math.min(24, resultList.length);
+                    const rows = generateDisplayContent(1, pageImgNum, resultList);
+                    this.setState({displayContent: rows});
+                    let footerContent = (
+                        <Pagination defaultCurrent={1} defaultPageSize={24} showSizeChanger={false}
+                                    total={6759}
+                                    onChange={this.handlePageChange}/>);
+                    this.setState({footerContent: footerContent});
+                    let selectContent = (<div>
+                        <br/>
+                        <Select defaultValue="全部类型" style={{width: 120}}>
+                            <Option value="全部类型">全部类型</Option>
+                            <Option value="jpg">jpg</Option>
+                            <Option value="png">png</Option>
+                            <Option value="bmp">bmp</Option>
+                        </Select>
+                        <Select defaultValue="全部尺寸" style={{width: 120}}>
+                            <Option value="全部尺寸">全部尺寸</Option>
+                            <Option value="大尺寸">大尺寸</Option>
+                            <Option value="中尺寸">中尺寸</Option>
+                            <Option value="小尺寸">小尺寸</Option>
+                        </Select>
+                        <RangePicker/>
+                    </div>);
+                    this.setState({selectContent: selectContent});
                 })
             headerContent = (<br/>);
         } else {

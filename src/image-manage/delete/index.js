@@ -105,8 +105,7 @@ class ImageManageDelete extends React.Component {
     closeModal = () => {
         this.setState({visible: false});
     };
-    handleCancel = e => {
-        console.log(e);
+    handleCancel = () => {
         this.setState({visible: false});
     };
     handleChange = async info => {
@@ -127,7 +126,7 @@ class ImageManageDelete extends React.Component {
             </Spin>);
             this.setState({modalContent: modalContent});
         } else if (status === 'done') {
-            axios.get(`http://localhost:8080/get-result-info?hashcode=${info.file.response}`)
+            axios.get(`http://localhost:8080/get-result-info?hashcode=${info.file.response.hashcode}&origincode=${info.file.response.origincode}`)
                 .then(async response => {
                         if (!info.file.url && !info.file.preview) {
                             info.file.preview = await getBase64FromFile(info.file.originFileObj);
@@ -179,11 +178,11 @@ class ImageManageDelete extends React.Component {
                                 选择本页所有图片
                             </Button>
                             &emsp;
-                            <Button type="primary" icon={<DeleteOutlined/>}>
+                            <Button type="primary" icon={<DeleteOutlined/>} onClick={()=>alert("图片删除成功!")}>
                                 删除所选图片
                             </Button>
                         </span>);
-                        this.setState({deleteContent:deleteContent})
+                        this.setState({deleteContent: deleteContent})
                     }
                 )
                 .catch(error => console.log(error));

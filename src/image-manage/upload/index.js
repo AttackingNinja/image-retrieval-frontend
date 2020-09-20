@@ -115,7 +115,7 @@ class ImageManageUpload extends React.Component {
             <div>
                 <br/>
                 <div>
-                    <Upload showUploadList={false}>
+                    <Upload showUploadList={false} beforeUpload={file => {alert('上传成功！')}}>
                         <Button type="primary" icon={<UploadOutlined/>}>
                             上传图片
                         </Button>

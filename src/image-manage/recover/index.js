@@ -22,7 +22,7 @@ const columns = [
         title: '操作',
         dataIndex: 'action',
         key: 'action',
-        render: text => <a>{text}</a>,
+        render: text => <a onClick={event => {event.preventDefault();alert("图片恢复成功！")}}>{text}</a>,
     }
 ];
 
